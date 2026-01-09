@@ -2,6 +2,7 @@ package com.back.domain.member.member.controller;
 
 
 import com.back.domain.member.member.dto.MemberDto;
+import com.back.domain.member.member.dto.MemberWithUsernameDto;
 import com.back.domain.member.member.entity.Member;
 import com.back.domain.member.member.service.MemberService;
 import com.back.global.exception.ServiceException;
@@ -103,6 +104,7 @@ public class ApiV1MemberController {
     @DeleteMapping("/logout")
     public RsData<Void> logout() {
         rq.deleteCookie("apiKey");
+        rq.deleteCookie("accessToken");
 
         return new RsData<>(
                 "200-1",
@@ -112,15 +114,15 @@ public class ApiV1MemberController {
 
 
     @GetMapping("/me")
-    public RsData<MemberDto> me() {
+    public RsData<MemberWithUsernameDto> me() {
         Member actor = memberService
-                .findById((rq.getActor().getId()))
+                .findById(rq.getActor().getId())
                 .get();
 
         return new RsData<>(
                 "200-1",
                 "%s님의 정보입니다.".formatted(actor.getName()),
-                new MemberDto(actor)
+                new MemberWithUsernameDto(actor)
         );
     }
 }
