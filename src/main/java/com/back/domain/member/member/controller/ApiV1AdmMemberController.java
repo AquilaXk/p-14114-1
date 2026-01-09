@@ -41,7 +41,7 @@ public class ApiV1AdmMemberController {
 
     @GetMapping("/{id}")
     public MemberWithUsernameDto getItem(
-            @PathVariable Integer id
+            @PathVariable int id
     ) {
         Member actor = rq.getActor();
 
