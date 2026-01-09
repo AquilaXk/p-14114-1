@@ -81,8 +81,10 @@ public class ApiV1MemberController {
         Member member = memberService.findByUsername(reqBody.username())
                 .orElseThrow(() -> new ServiceException("401-1", "존재하지 않는 아이디입니다."));
 
-        if (!member.getPassword().equals(reqBody.password()))
-            throw new ServiceException("401-2", "비밀번호가 일치하지 않습니다.");
+        memberService.checkPassword(
+                member,
+                reqBody.password()
+        );
 
         String accessToken = memberService.genAccessToken(member);
 
@@ -104,7 +106,6 @@ public class ApiV1MemberController {
     @DeleteMapping("/logout")
     public RsData<Void> logout() {
         rq.deleteCookie("apiKey");
-        rq.deleteCookie("accessToken");
 
         return new RsData<>(
                 "200-1",
@@ -114,15 +115,11 @@ public class ApiV1MemberController {
 
 
     @GetMapping("/me")
-    public RsData<MemberWithUsernameDto> me() {
+    public MemberWithUsernameDto me() {
         Member actor = memberService
                 .findById(rq.getActor().getId())
                 .get();
 
-        return new RsData<>(
-                "200-1",
-                "%s님의 정보입니다.".formatted(actor.getName()),
-                new MemberWithUsernameDto(actor)
-        );
+        return new MemberWithUsernameDto(actor);
     }
 }
