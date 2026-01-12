@@ -44,7 +44,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
 
     implementation("org.springframework.boot:spring-boot-starter-security")
-    testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-security-test")
 
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0")
 
